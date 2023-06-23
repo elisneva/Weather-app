@@ -1,4 +1,4 @@
-import { calculateDewPoint, convertPressure, getCurrenDateTime, getWindDirection } from "./helper.js";
+import { calculateDewPoint, convertPressure, getCurrenDateTime, getWeatherForecastData } from "./helper.js";
 
 export const renderWidgetToday = (widget, data) =>{
 const {dayOfMonth, month, year, hours, minutes, dayOfWeek} = getCurrenDateTime();
@@ -38,7 +38,7 @@ export const renderWidgetOther = (widget, data) =>{
         <div class="widget__wind">
         <p class="widget__wind-title">Wind</p>
         <p class="widget__wind-speed">${data.wind.speed} m/s</p>
-        <p class="widget__wind-text">${getWindDirection(90)}</p>
+        <p class="widget__wind-text" style="transform: rotate(${data.wind.deg}deg">&#8595;</p>
 
         </div>
         <div class="widget__humidity">
@@ -61,14 +61,14 @@ export const renderWidgetForecast = (widget, data) =>{
     widgetForecast.className = 'widget__forecast';
     widget.append(widgetForecast)
 
-    const forecastData = data;//!
-    const item = forecastData.map(()=>{
+    const forecastData = getWeatherForecastData(data);//!
+    const items = forecastData.map((item)=>{
         const widgetDayItem = document.createElement('li');
         widgetDayItem.className = 'widget__day-item';
-        widgetDayItem.insertAdjacentElement('beforebegin',`
+        widgetDayItem.insertAdjacentHTML('beforeend',`
         <p class="widget__day-text">${item.dayOfWeek}</p>
         <img class="widget__day-img" src="./icon/${item.weatherIcon}.svg" alt="Weather">
-        <p class="widget__day-temp">${item.minTemp}°/${item.maxTemp}°</p>
+        <p class="widget__day-temp">${(item.minTemp - 273.15).toFixed(1)}°/${(item.maxTemp - 273.15).toFixed(1)}°</p>
         `);
         return widgetDayItem;
     })
