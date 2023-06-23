@@ -1,3 +1,5 @@
+const addZero = (n) => n < 10 ? `0${n}` : n;
+
 export const getCurrenDateTime = () => {
     const months = [
         'jan',
@@ -30,15 +32,8 @@ export const getCurrenDateTime = () => {
     const year = date.getFullYear();
     const dayOfWeek = weekdays[date.getDay()];
 
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-
-    //correction with beginig with 0
-    if (hours < 10){
-        hours = `0${hours}`;
-    }
-
-    //?minutes
+    const hours = addZero(date.getHours());
+    const minutes = addZero(date.getMinutes());
 
     return{dayOfMonth, month, year, hours, minutes, dayOfWeek};
 
